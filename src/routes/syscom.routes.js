@@ -6,5 +6,6 @@ const router = Router();
 
 router.get('/categorias', categorias);
 // router.get('/categorias/:id', categoriasID);
+//comment
 
 export default router;
