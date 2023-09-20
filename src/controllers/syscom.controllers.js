@@ -165,7 +165,7 @@ export const getMarcasProducts = async (req, res) => {
 // requiere this variables búsqueda, categorías, marcas
 export const getProductos = async (req, res) =>{
     try {
-
+        const {categoria, marca, busqueda} = req.query;
         const params = new URLSearchParams()
         params.append("grant_type", "client_credentials")
 
@@ -179,7 +179,8 @@ export const getProductos = async (req, res) =>{
         }
         
     });
-    const response = await axios.get(`${SYSCOM_API}/productos`,{
+    const apiUrl = `${SYSCOM_API}/productos?categoria=${categoria}&marca=${marca}`;
+    const response = await axios.get(apiUrl,{
         headers:{
             Authorization: `Bearer ${access_token}`,
         }
@@ -226,7 +227,64 @@ export const getUtilities = async (req, res) =>{
 // section of bills
 // we need the var anio and busqueda
 export const getbills = async (req, res) => {
+    try {
+        const {anio, busqueda} = req.query;
+        const params = new URLSearchParams()
+        params.append("grant_type", "client_credentials")
 
+        const {data: {access_token},}= await axios.post('https://developers.syscom.mx/oauth/token', params, {
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            auth:{
+                username: SYSCOM_API_CLIENT,
+                password: SYSCOM_API_SECRET,
+        }
+        
+    });
+    const apiUrl = `${SYSCOM_API}/facturas?anio=${anio}`;
+    const response = await axios.get(apiUrl,{
+        headers:{
+            Authorization: `Bearer ${access_token}`,
+        }
+    });
+    
+    // console.log(response.data);
+    return res.json(response.data);
+    } catch (error) {
+        return res.status(500).send("Something goes wrong");
+    }
+};
+//bills by ID
+export const getBillsByID = async(req, res)=>{
+    try {
+        // const {anio, busqueda} = req.query;
+        const {billsId} = req.params;
+        const params = new URLSearchParams()
+        params.append("grant_type", "client_credentials")
+
+        const {data: {access_token},}= await axios.post('https://developers.syscom.mx/oauth/token', params, {
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            auth:{
+                username: SYSCOM_API_CLIENT,
+                password: SYSCOM_API_SECRET,
+        }
+        
+    });
+    // const apiUrl = `${SYSCOM_API}/facturas/${billsId}`;
+    const response = await axios.get(`${SYSCOM_API}/facturas/${billsId}`,{
+        headers:{
+            Authorization: `Bearer ${access_token}`,
+        }
+    });
+    
+    // console.log(response.data);
+    return res.json(response.data);
+    } catch (error) {
+        return res.status(500).send("Something goes wrong");
+    }
 };
 
 // section of wishlists
@@ -293,6 +351,7 @@ export const wishlistsId = async(req, res ) =>{
     }
 
 };
+
 
 //section of carrito
 //requiere other variables in this section
