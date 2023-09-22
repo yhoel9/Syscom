@@ -193,6 +193,98 @@ export const getProductos = async (req, res) =>{
     }
 }
 
+export const getProductosById = async (req, res)=>{
+    try {
+        const {productId} = req.params;
+        const {categoria, marca, busqueda} = req.query;
+        const params = new URLSearchParams()
+        params.append("grant_type", "client_credentials")
+
+        const {data: {access_token},}= await axios.post('https://developers.syscom.mx/oauth/token', params, {
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            auth:{
+                username: SYSCOM_API_CLIENT,
+                password: SYSCOM_API_SECRET,
+        }
+        
+    });
+    const apiUrl = `${SYSCOM_API}/productos/${productId}?categoria=${categoria}&marca=${marca}`;
+    const response = await axios.get(apiUrl,{
+        headers:{
+            Authorization: `Bearer ${access_token}`,
+        }
+    });
+    
+    // console.log(response.data);
+    return res.json(response.data);
+    } catch (error) {
+        return res.status(500).send("Something goes wrong");
+    }
+};
+
+export const getProductosRelacionados = async (req, res) =>{
+    try {
+        const {productId} = req.params;
+        const {categoria, marca, busqueda} = req.query;
+        const params = new URLSearchParams()
+        params.append("grant_type", "client_credentials")
+
+        const {data: {access_token},}= await axios.post('https://developers.syscom.mx/oauth/token', params, {
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            auth:{
+                username: SYSCOM_API_CLIENT,
+                password: SYSCOM_API_SECRET,
+        }
+        
+    });
+    const apiUrl = `${SYSCOM_API}/productos/${productId}/relacionados?categoria=${categoria}&marca=${marca}`;
+    const response = await axios.get(apiUrl,{
+        headers:{
+            Authorization: `Bearer ${access_token}`,
+        }
+    });
+    
+    // console.log(response.data);
+    return res.json(response.data);
+    } catch (error) {
+        return res.status(500).send("Something goes wrong");
+    }
+};
+export const getProductosAccesorios = async (req, res) =>{
+    try {
+        const {productId} = req.params;
+        const {categoria, marca, busqueda} = req.query;
+        const params = new URLSearchParams()
+        params.append("grant_type", "client_credentials")
+
+        const {data: {access_token},}= await axios.post('https://developers.syscom.mx/oauth/token', params, {
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            auth:{
+                username: SYSCOM_API_CLIENT,
+                password: SYSCOM_API_SECRET,
+        }
+        
+    });
+    const apiUrl = `${SYSCOM_API}/productos/${productId}/accesorios?categoria=${categoria}&marca=${marca}`;
+    const response = await axios.get(apiUrl,{
+        headers:{
+            Authorization: `Bearer ${access_token}`,
+        }
+    });
+    
+    // console.log(response.data);
+    return res.json(response.data);
+    } catch (error) {
+        return res.status(500).send("Something goes wrong");
+    }
+};
+
 //section of utilities or money exchange
 export const getUtilities = async (req, res) =>{
     try {
