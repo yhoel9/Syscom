@@ -414,7 +414,6 @@ export const wishlists = async (req, res) => {
 export const newWishlists = async(req, res) => {
     try {
         const {nombre, productos} =req.body;
-
         const params = new URLSearchParams()
         params.append("grant_type", "client_credentials")
 
@@ -432,12 +431,8 @@ export const newWishlists = async(req, res) => {
     // console.log(access_token);
     const apiUrl = `${SYSCOM_API}/wishlists`;
     const createWishlist = {
-        nombre: "new wishlists testing ",
-        productos: [
-            87829,
-            87828,
-            75173
-        ]
+         nombre,
+        productos
     }
     const response = await axios.post(apiUrl, createWishlist , 
     {
